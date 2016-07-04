@@ -1,0 +1,30 @@
+{
+    "SwiftRepository": {
+        "access": {
+            "account":"",
+            "user": "",
+            "key": "",
+            "auth_url": ""
+        },
+        "container": {
+            "container": "apps",
+            "path": "releases"
+        }
+    },
+    "S3Repository": {
+        "access": {
+            "region": "",
+            "access_key": "",
+            "secret_access_key": ""
+        },
+        "container": {
+            "bucket": "apps",
+            "path": "releases"
+        }
+    },
+    "config": {
+        "log_level":"DEBUG",
+        "package_callback": ""
+    }
+
+}
