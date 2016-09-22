@@ -103,6 +103,7 @@ class SwiftRepository(object):
                                                    key=self._connection['key'],
                                                    tenant_name=self._connection[
                                                        'account'],
-                                                   authurl=self._connection['auth_url'])
+                                                   authurl=self._connection['auth_url'],
+                                                   timeout=30)
 
         return connection
