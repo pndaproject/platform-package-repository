@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] 2016-09-07
+### Changed
+- PNDA-1811. Added timeout parameter to swift connection
+- Enhancements to CI
+
 ## [0.1.0] 2016-07-01
 ### First version
 
