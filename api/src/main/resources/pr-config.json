@@ -11,6 +11,11 @@
             "path": "releases"
         }
     },
+    "FsRepository": {
+        "container": {
+            "path": "/tmp/packages"
+        }
+    },
     "S3Repository": {
         "access": {
             "region": "",

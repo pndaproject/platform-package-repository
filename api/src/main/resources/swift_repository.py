@@ -29,7 +29,7 @@ class SwiftRepository(object):
 
     def get_package_list(self):
         # get information from swift:
-        swift_packages = self.get_contatniner_contents(None)[1]
+        swift_packages = self.get_container_contents(None)[1]
         # return a clean list of packages:
         package_names_with_path = [swift_item["name"] for swift_item in swift_packages]
         # remove pesky path from package names
@@ -64,7 +64,7 @@ class SwiftRepository(object):
         finally:
             connection.close()
 
-    def get_contatniner_contents(self, recency):
+    def get_container_contents(self, recency):
         logging.debug("list_packages %s", recency)
         try:
             connection = self._connect()
