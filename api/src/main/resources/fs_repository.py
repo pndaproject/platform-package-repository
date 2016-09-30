@@ -30,38 +30,14 @@ class FsRepository(object):
     def __init__(self, location):
         self._location = location
 
-    def list_packages(self, recency):
+    def read_package(self, package_name):
+        return self.download_package(self._location['path']+"/"+package_name)
 
-        logging.debug("list_packages %s", recency)
+    def get_package_list(self):
 
         path = self._location['path']
-        logging.debug(path)
-
-        candidates = {}
-        for item in os.listdir(path):
-            item = "%s%s" % (path, item)
-            logging.debug(item)
-            grps = re.match(r'.*/((.*)-(\d+.\d+.\d+).*)', item)
-            if grps is not None:
-                groups = grps.groups()
-                if len(groups) == 3:
-                    fullname, shortname, version = groups
-                entry = {'version': version, 'file': fullname}
-                try:
-                    candidates[shortname].append(entry)
-                except KeyError:
-                    candidates[shortname] = [entry]
-
-        packages_list = []
-        for can in candidates:
-            last = sorted(
-                candidates[can],
-                key=lambda x: StrictVersion(
-                    x['version']),
-                reverse=True)[:recency]
-            packages_list.append({'name': can, 'latest_versions': last})
-
-        return packages_list
+        package_names = [item.replace(path + "/", "") for item in os.listdir(path)]
+        return package_names
 
     def is_available(self, package):
         logging.debug("is_available %s", package)
@@ -76,6 +52,6 @@ class FsRepository(object):
 
     def download_package(self, package):
         logging.debug("download_package %s", package)
-        with open("%s.tar.gz" % package, "rb") as in_file:
+        with open("%s" % package, "rb") as in_file:
             package_data = in_file.read()
         return package_data

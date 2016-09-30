@@ -12,8 +12,8 @@
         }
     },
     "FsRepository": {
-        "container": {
-            "path": "/tmp/packages"
+        "location": {
+            "path": ""
         }
     },
     "S3Repository": {

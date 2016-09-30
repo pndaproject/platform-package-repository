@@ -59,18 +59,18 @@ class PackageRepositoryRestServer(object):
         # package_repository = local_package_repository.LocalPackageRepository() #use this instead of swift for debug
         use_swift = len(self.config['SwiftRepository']['access']['account']) > 0
         use_s3 = len(self.config['S3Repository']['access']['access_key']) > 0
-        use_fs = len(self.config['FsRepository']['container']['path']) > 0
+        use_fs = len(self.config['FsRepository']['location']['path']) > 0
         # pylint: disable=redefined-variable-type
         if use_swift:
             package_repository = SwiftRepository(self.config['SwiftRepository'])
         elif use_s3:
             package_repository = S3Repository(self.config['S3Repository'])
         elif use_fs:
-            package_repository = FsRepository(self.config['FsRepository']['container']['path'])
+            package_repository = FsRepository(self.config['FsRepository']['location'])
         else:
             logging.error("missing repository configuration, should be SwiftRepository, S3Repository or FsRepository")
             self.stop()
-            
+
         data_logger = DataLoggerClient(self.config['config'])
         package_manager = PackageManager(package_repository, data_logger)
 
