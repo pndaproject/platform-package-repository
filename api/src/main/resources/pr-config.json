@@ -11,6 +11,11 @@
             "path": "releases"
         }
     },
+    "FsRepository": {
+        "location": {
+            "path": ""
+        }
+    },
     "S3Repository": {
         "access": {
             "region": "",
