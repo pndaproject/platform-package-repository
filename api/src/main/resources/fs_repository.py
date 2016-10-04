@@ -34,7 +34,6 @@ class FsRepository(object):
         return self.download_package(self._location['path']+"/"+package_name)
 
     def get_package_list(self):
-
         path = self._location['path']
         package_names = [item.replace(path + "/", "") for item in os.listdir(path)]
         return package_names
@@ -55,3 +54,15 @@ class FsRepository(object):
         with open("%s" % package, "rb") as in_file:
             package_data = in_file.read()
         return package_data
+
+    def put_package(self, package_name, package_contents):
+        logging.debug("uploading package %s", package_name)
+        fd = os.open(self._location['path']+"/"+package_name,os.O_RDWR|os.CREAT)
+        ret = os.write(fd,"This is test")
+        logging.debug("Write %s bytes in %s%s", ret, % (self._location['path']+"/"+package_name))
+        os.close(fd)
+
+    def delete_package(self, package):
+        logging.debug("delete_package %s", package)
+
+        os.remove(self._location['path']+"/"+package)
