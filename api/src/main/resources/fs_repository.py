@@ -58,7 +58,7 @@ class FsRepository(object):
     def put_package(self, package_name, package_contents):
         logging.debug("uploading package %s", package_name)
         fd = os.open(self._location['path']+"/"+package_name,os.O_RDWR|os.CREAT)
-        ret = os.write(fd,"This is test")
+        ret = os.write(fd,package_contents)
         logging.debug("Write %s bytes in %s%s", ret, % (self._location['path']+"/"+package_name))
         os.close(fd)
 
