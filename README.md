@@ -53,7 +53,7 @@ So here is an example of configuration for:
             "path": "/opt/packages"
         }
     }
-```json
+```
 
 ## Repository API
 
