@@ -10,6 +10,51 @@ The platform-package-repository component provides a REST API that allows:
  - a package to be downloaded
  - the contents of repository to be listed
 
+## Repository configuration
+
+All the configuration is defined in the file pr-config.json. Currently, the package repository support Swift / AWS S3 or file system backend storage. 
+So here is an example of configuration for:
+
+- Swift: reuse the variable from the openrc script available through the OpenStack Horizon console. In this example, we assume that the apps container with the folder releases is already created and also that the user has access to Swift.
+
+```json
+    "SwiftRepository": {
+        "access": {
+            "account":"OS_PROJECT_NAME",
+            "user": "OS_USERNAMAE",
+            "key": "OS_PASSWORD",
+            "auth_url": "OS_AUTH_URL"
+        },
+        "container": {
+            "container": "apps",
+            "path": "releases"
+        }
+    },
+```
+
+- AWS S3:
+```json
+    "S3Repository": {
+        "access": {
+            "region": "AWS_REGION",
+            "access_key": "AWS_KEY",
+            "secret_access_key": "AWS_SECRET_KEY"
+        },
+        "container": {
+            "bucket": "apps",
+            "path": "releases"
+        }
+    },
+```
+- File system: which could be local filesystem, sshfs or mounted volume but his is transparent from a package repository point of view, this will be manage on the provisioning part, as you could see on Heat templates for example.
+```json
+    "FsRepository": {
+        "location": {
+            "path": "/opt/packages"
+        }
+    }
+```json
+
 ## Repository API
 
 By default, the packages API is available at port `8888` of the `edge` node.
