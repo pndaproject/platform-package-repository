@@ -12,10 +12,11 @@ The platform-package-repository component provides a REST API that allows:
 
 ## Repository configuration
 
-All the configuration is defined in the file pr-config.json. Currently, the package repository support Swift / AWS S3 or file system backend storage. 
-So here is an example of configuration for:
+All the configuration is defined in the file pr-config.json. Currently, the package repository supports Swift / AWS S3 or file system backend storage. 
 
-- Swift: reuse the variable from the openrc script available through the OpenStack Horizon console. In this example, we assume that the apps container with the folder releases is already created and also that the user has access to Swift.
+Here are some example configurations for each supported option.
+
+- Swift: use the settings from the openrc script available through the OpenStack Horizon console. This assumes that the apps container with the folder releases is already created and also that the user has access to Swift.
 
 ```json
     "SwiftRepository": {
@@ -46,7 +47,7 @@ So here is an example of configuration for:
         }
     },
 ```
-- File system: which could be local filesystem, sshfs or mounted volume but his is transparent from a package repository point of view, this will be manage on the provisioning part, as you could see on Heat templates for example.
+- File system: this could be local filesystem, sshfs or mounted volume but is transparent from a package repository point of view.
 ```json
     "FsRepository": {
         "location": {
