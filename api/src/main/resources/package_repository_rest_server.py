@@ -47,9 +47,6 @@ class PackageRepositoryRestServer(object):
         # This event will fire after the server starts listening:
         self._started = Event()
         self.config = configuration
-        logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
-                            level=logging.getLevelName(self.config['config']['log_level']),
-                            stream=sys.stderr)
 
     def run(self):
         """
@@ -153,7 +150,6 @@ class PackageRepositoryRestServer(object):
         http_server = tornado.httpserver.HTTPServer(Application(), max_buffer_size=100000000)
         http_server.listen(options.port)
         logging.info("Listening on port: " + str(options.port))
-
         # notify that server has started:
         self._started.set()
         # start handling incomming requests:
@@ -181,6 +177,16 @@ def main():
         # load the config file as json
         config = json.load(config_file)
         # run with configuration
+
+    root = logging.getLogger()
+    if root.handlers:
+        for handler in root.handlers:
+            root.removeHandler(handler)
+
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
+                        level=logging.getLevelName(config['config']['log_level']),
+                        stream=sys.stderr)
+
     PackageRepositoryRestServer(config).run()
 
 
