@@ -31,6 +31,7 @@ from data_logger_client import DataLoggerClient
 from package_manager import PackageManager
 from swift_repository import SwiftRepository
 from aws_repository import S3Repository
+from fs_repository import FsRepository
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -54,14 +55,16 @@ class PackageRepositoryRestServer(object):
         """
         Start running a rest interface using tornado
         """
-        # load configuration:
-        # package_repository = local_package_repository.LocalPackageRepository() #use this instead of swift for debug
-        use_swift = len(self.config['SwiftRepository']['access']['account']) > 0
         # pylint: disable=redefined-variable-type
-        if use_swift:
+        if 'SwiftRepository' in self.config:
             package_repository = SwiftRepository(self.config['SwiftRepository'])
-        else:
+        elif 'S3Repository' in self.config:
             package_repository = S3Repository(self.config['S3Repository'])
+        elif 'FsRepository'in self.config:
+            package_repository = FsRepository(self.config['FsRepository']['location'])
+        else:
+            logging.error("missing repository configuration, should be SwiftRepository, S3Repository or FsRepository")
+            self.stop()
 
         data_logger = DataLoggerClient(self.config['config'])
         package_manager = PackageManager(package_repository, data_logger)

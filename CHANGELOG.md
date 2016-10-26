@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] 2016-10-21
+### Added
+- PNDA-1211: add FS repository as backend storage
+
 ## [0.1.1] 2016-09-07
 ### Changed
 - PNDA-1811. Added timeout parameter to swift connection
