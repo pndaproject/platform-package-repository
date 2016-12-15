@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] 2016-12-12
+### Changed
+- Externalized build logic from Jenkins to shell script so it can be reused
+
+### Fixed
+- PNDA-2265: Fix logging config 
+
 ## [0.2.0] 2016-10-21
 ### Added
 - PNDA-1211: add FS repository as backend storage
