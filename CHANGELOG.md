@@ -1,12 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] 2017-01-20
+### Changed
+- PNDA-2485: Pinned all python libraries to strict version numbers
+
 ## [0.2.1] 2016-12-12
 ### Changed
 - Externalized build logic from Jenkins to shell script so it can be reused
 
 ### Fixed
-- PNDA-2265: Fix logging config 
+- PNDA-2265: Fix logging config
 
 ## [0.2.0] 2016-10-21
 ### Added
