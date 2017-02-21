@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## Not released
+### Changed
+- PNDA-2577: review python deps versions
+
 ## [0.3.0] 2017-01-20
 ### Changed
 - PNDA-2485: Pinned all python libraries to strict version numbers
