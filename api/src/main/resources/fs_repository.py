@@ -21,10 +21,8 @@ License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
 either express or implied.
 """
 
-import re
 import os
 import logging
-from distutils.version import StrictVersion
 
 class FsRepository(object):
     def __init__(self, location):
@@ -59,7 +57,7 @@ class FsRepository(object):
         logging.debug("uploading package %s", package_name)
         with open(self._location['path']+"/"+package_name, 'wb') as out_file:
             out_file.write(package_contents)
-        
+
     def delete_package(self, package):
         logging.debug("delete_package %s", package)
 
