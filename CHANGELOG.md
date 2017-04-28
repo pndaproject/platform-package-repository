@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Not released
 ### Changed
 - PNDA-2577: review python deps versions
+- PNDA-2883: add `auth_version` to `pr-config.json` to set the swift keystone auth version associated with `auth_url`
 
 ## [0.3.0] 2017-01-20
 ### Changed
