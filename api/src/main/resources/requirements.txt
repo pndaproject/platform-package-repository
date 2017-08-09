@@ -1,7 +1,7 @@
 Babel==2.3.4
 backports-abc==0.5
 backports.ssl-match-hostname==3.5.0.1
-boto==2.45.0
+boto==2.46.1
 certifi==2016.9.26
 debtcollector==1.10.0
 funcsigs==1.0.2
@@ -15,7 +15,7 @@ netifaces==0.10.5
 oslo.config==3.21.0
 oslo.i18n==3.11.0
 oslo.serialization==2.15.0
-oslo.utils==3.20.0
+oslo.utils==3.21.0
 pbr==1.10.0
 positional==1.1.1
 pyparsing==2.1.10

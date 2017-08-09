@@ -25,7 +25,9 @@ class TestSwiftRepo(unittest.TestCase):
             "account": "some_account",
             "user": "user",
             "key": "not_telling",
-            "auth_url": "not_telling_either"
+            "auth_url": "not_telling_either",
+            "auth_version": "2",
+
         },
         "container": {
             "container": "apps",

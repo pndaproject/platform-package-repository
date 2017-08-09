@@ -4,7 +4,9 @@
             "account":"",
             "user": "",
             "key": "",
-            "auth_url": ""
+            "auth_url": "",
+            "auth_version": ""
+
         },
         "container": {
             "container": "apps",

@@ -97,12 +97,10 @@ class SwiftRepository(object):
     def _connect(self):
         logging.debug("_connect")
 
-        connection = swiftclient.client.Connection(auth_version='2',
-                                                   user=self._connection[
-                                                       'user'],
+        connection = swiftclient.client.Connection(auth_version=self._connection['auth_version'],
+                                                   user=self._connection['user'],
                                                    key=self._connection['key'],
-                                                   tenant_name=self._connection[
-                                                       'account'],
+                                                   tenant_name=self._connection['account'],
                                                    authurl=self._connection['auth_url'],
                                                    timeout=30)
 
