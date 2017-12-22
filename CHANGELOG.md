@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - PNDA-2577: review python deps versions
 - PNDA-2883: add `auth_version` to `pr-config.json` to set the swift keystone auth version associated with `auth_url`
+- PNDA-3601: disable emailtext in Jenkins file and replace it with notifier stage and job
 
 ## [0.3.0] 2017-01-20
 ### Changed
