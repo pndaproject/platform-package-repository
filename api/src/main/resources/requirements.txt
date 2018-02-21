@@ -2,7 +2,7 @@ Babel==2.3.4
 backports-abc==0.5
 backports.ssl-match-hostname==3.5.0.1
 boto==2.46.1
-certifi==2016.9.26
+certifi==2017.4.17
 debtcollector==1.10.0
 funcsigs==1.0.2
 futures==3.0.5
