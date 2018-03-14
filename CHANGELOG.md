@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- PNDA-4415: Use boto 2.48
 
 ## [0.3.2] 2018-02-10
 ### Changed
