@@ -22,6 +22,7 @@ pyparsing==2.1.10
 python-keystoneclient==3.8.0
 python-swiftclient==3.2.0
 pytz==2016.10
+PyYAML==3.12
 requests==2.12.4
 rfc3986==0.4.1
 singledispatch==3.4.0.3

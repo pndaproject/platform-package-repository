@@ -33,9 +33,9 @@ class PackageRepoRestClient(object):
         :param package_data: The actual binary data of the package
         """
         url = self.api_url + "/packages/" + package_name
-        logging.debug("PUT: " + url)
+        logging.debug("PUT: %s", url)
         response = requests.put(url, data=package_data)
-        logging.debug("response code: " + str(response.status_code))
+        logging.debug("response code: %s", str(response.status_code))
         assert response.status_code == 200
 
     def get_package(self, package_name, expected_codes=None):
@@ -63,9 +63,9 @@ class PackageRepoRestClient(object):
         if not expected_codes:
             expected_codes = [200]
         url = self.api_url + path
-        logging.debug("GET: " + url)
+        logging.debug("GET: %s", url)
         response = requests.get(url)
-        logging.debug("response code: " + str(response.status_code))
+        logging.debug("response code: %s", str(response.status_code))
         if (404 not in expected_codes) and (response.status_code == 404):
             raise NotFound(path)
         assert response.status_code in expected_codes

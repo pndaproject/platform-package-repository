@@ -64,11 +64,15 @@ By default, the packages API is available at port `8888` of the `edge` node.
 
 ?recency=n may be used to control how many versions of each package are listed, by default recency=1
 ````
-GET /packages
+GET /packages?user.name=<username>
 
 Response Codes:
 200 - OK
+403 - Unauthorised user
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 Example response:
 [
@@ -87,12 +91,16 @@ Example response:
 ### Get package contents
 ````
 Downloads a package from the repository
-GET /packages/<package>
+GET /packages/<package>?user.name=<username>
 
 Response Codes:
 200 - OK
+403 - Unauthorised user
 404 - Not Found
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 Response body:
 The binary contents of the package that was uploaded
@@ -100,11 +108,15 @@ The binary contents of the package that was uploaded
 
 ### Upload a package to the repository
 ````
-PUT /packages/<package>
+PUT /packages/<package>?user.name=<username>
 
 Response Codes:
 200 - Accepted
+403 - Unauthorised user
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 e.g.
 curl http://host:8888/packages/my-package-1.0.0.tar.gz --upload-file my-package-1.0.0.tar.gz
@@ -112,12 +124,16 @@ curl http://host:8888/packages/my-package-1.0.0.tar.gz --upload-file my-package-
 ````
 ### Delete a package from the repository
 ````
-DELETE /packages/<package>
+DELETE /packages/<package>?user.name=<username>
 
 Response Codes:
 200 - Accepted
+403 - Unauthorised user
 404 - Not Found
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 e.g.
 curl -X DELETE http://host:8888/packages/my-package-1.0.0.tar.gz
