@@ -22,6 +22,10 @@ from package_manager import PackageManager
 
 
 class GenerateRecord(unittest.TestCase):
+
+    def _mock_get_groups(self, _):
+        return []
+
     def test_package_versions(self):
         """
         tests that packages are grouped correctly by version
@@ -32,12 +36,14 @@ class GenerateRecord(unittest.TestCase):
         package_repository.get_package_list = Mock(return_value=[test_package, old_test_package])
         data_logger = Mock()
         package_manager = PackageManager(package_repository, data_logger)
+        # pylint: disable=protected-access
+        package_manager._get_groups = self._mock_get_groups
         # run test with only latest versions of packages:
-        single_version_list = package_manager.get_packages_grouped_by_version(number_of_versions_to_list=1)
+        single_version_list = package_manager.get_packages_grouped_by_version('someone', number_of_versions_to_list=1)
         self.assertIn(test_package, json.dumps(single_version_list), "package should be in list")
         self.assertNotIn(old_test_package, json.dumps(single_version_list), "package should not be in list")
         # run test with all versions of packages:
-        multiple_version_list = package_manager.get_packages_grouped_by_version(number_of_versions_to_list=10)
+        multiple_version_list = package_manager.get_packages_grouped_by_version('someone', number_of_versions_to_list=10)
         self.assertIn(test_package, json.dumps(multiple_version_list), "package should be in list")
         self.assertIn(old_test_package, json.dumps(multiple_version_list), "package should  be in list")
 
@@ -50,8 +56,10 @@ class GenerateRecord(unittest.TestCase):
         package_repository = LocalPackageRepository()
         data_logger = Mock()
         package_manager = PackageManager(package_repository, data_logger)
-        package_manager.put_package(test_package, test_package_data)
+        # pylint: disable=protected-access
+        package_manager._get_groups = self._mock_get_groups
+        package_manager.put_package(test_package, test_package_data, 'somebody')
         # check that what was written matches what was read
         self.assertEquals(test_package_data,
-                          package_manager.read_package(test_package),
+                          package_manager.read_package(test_package, 'somebody'),
                           "package contentens match what was written")

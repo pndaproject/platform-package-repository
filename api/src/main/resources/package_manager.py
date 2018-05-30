@@ -11,10 +11,23 @@
 
 	 Purpose:    Manages packages
 """
+import grp
+import pwd
 import re
 from distutils.version import StrictVersion
-from data_logger_client import DataLoggerClient
 
+import authorizer_local
+from data_logger_client import DataLoggerClient
+import exceptiondef
+
+class Resources(object):
+    REPOSITORY = "package_repository:repository"
+
+
+class Actions(object):
+    DELETE = "delete"
+    READ = "read"
+    WRITE = "write"
 
 class PackageManager(object):
     """
@@ -27,26 +40,49 @@ class PackageManager(object):
         """
         self.package_repository = package_repository
         self.data_logger_client = data_logger_client
+        self._authorizer = authorizer_local.AuthorizerLocal()
 
-    def read_package(self, package_name):
+    def _get_groups(self, user):
+        groups = []
+        if user:
+            try:
+                groups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
+                gid = pwd.getpwnam(user).pw_gid
+                groups.append(grp.getgrgid(gid).gr_name)
+            except:
+                raise exceptiondef.Forbidden('Failed to find details for user "%s"' % user)
+        return groups
+
+    def _authorize(self, user_name, resource_type, resource_owner, action_name):
+        qualified_action = '%s:%s' % (resource_type, action_name)
+        identity = {'user': user_name, 'groups': self._get_groups(user_name)}
+        resource = {'type': resource_type, 'owner': resource_owner}
+        action = {'name': qualified_action}
+        if not self._authorizer.authorize(identity, resource, action):
+            raise exceptiondef.Forbidden('User "%s" does not have authorization for "%s"' % (user_name, qualified_action))
+
+    def read_package(self, package_name, user_name):
         """
         :returns the contents of the specified package
         """
+        self._authorize(user_name, Resources.REPOSITORY, None, Actions.READ)
         return self.package_repository.read_package(package_name)
 
-    def delete_package(self, package_name):
+    def delete_package(self, package_name, user_name):
         """
         deletes the specified package
         """
+        self._authorize(user_name, Resources.REPOSITORY, None, Actions.DELETE)
         self.package_repository.delete_package(package_name)
         self.data_logger_client.report_event(name=package_name,
                                              endpoint_type=DataLoggerClient.ENDPOINT_PACKAGES,
                                              state=DataLoggerClient.STATE_NOTCREATED)
 
-    def put_package(self, package_name, package_contents):
+    def put_package(self, package_name, package_contents, user_name):
         """
         updates the contents of a package in the repository
         """
+        self._authorize(user_name, Resources.REPOSITORY, None, Actions.WRITE)
         # put the package in the repository
         self.package_repository.put_package(package_name, package_contents)
         # report that a new package has been created
@@ -54,23 +90,15 @@ class PackageManager(object):
                                              endpoint_type=DataLoggerClient.ENDPOINT_PACKAGES,
                                              state=DataLoggerClient.STATE_CREATED)
 
-    def get_packages_grouped_by_version(self, number_of_versions_to_list=None):
+    def get_packages_grouped_by_version(self, user_name, number_of_versions_to_list=None):
         """
         Logic code for dealing with packages
         :param number_of_versions_to_list The number of versions to list for each package.
-        Refactor Note:
-        To conform with previous package management workflow,this code is extracted from:
-        https://cto-github.cisco.com/CTAO-Team6-Analytics/platform-deployment-manager/blob/2.0.7/api/src/main/resources/repository.py
-        The schema specifies that:
-            All file which are of format:
+        All file names are formatted as:
             VERSION-major_number.minor_number.tar.gz
-            Are all related the the same package.
-        In the future this versioning might be moved into an explicit schema in the data layer.
-        * ATM reading all the names of all versions for all files is required to return any version of any package.
-        * Entries that were created and do not conform to the regex below will not be listed.
-        * Might want to return a dictionary of packages instead of an array of exclusively named pairs
         """
         # get a list of ungrouped package names:
+        self._authorize(user_name, Resources.REPOSITORY, None, Actions.READ)
         package_names = self.get_package_list()
         candidates = {}
         for item in package_names:
@@ -124,7 +152,7 @@ class PackageManager(object):
                              package_name_without_extension)
 
         package_version_list = re.findall(r'(\d+\.\d+\.\d+)([-]?[a-zA-Z]*)', package_name_without_extension) # get the package version
-        if len(package_version_list) > 0:
+        if package_version_list:
             package_version = ''.join(package_version_list[0])
             try:
                 _ = StrictVersion(package_version) # check if version conforms to strict versioning
