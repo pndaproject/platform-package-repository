@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- PNDA-4562: Add authorization to API
+
 ### Changed
 - PNDA-4415: Use boto 2.48
 
