@@ -24,6 +24,7 @@ either express or implied.
 import os
 import logging
 
+
 class FsRepository(object):
     def __init__(self, location):
         self._location = location
@@ -49,9 +50,12 @@ class FsRepository(object):
 
     def download_package(self, package):
         logging.debug("download_package %s", package)
-        with open("%s" % package, "rb") as in_file:
-            package_data = in_file.read()
-        return package_data
+        try:
+            with open("%s" % package, "rb") as in_file:
+                package_data = in_file.read()
+            return package_data
+        except IOError:
+            raise IOError("Package Not Found.")
 
     def put_package(self, package_name, package_contents):
         logging.debug("uploading package %s", package_name)
@@ -60,5 +64,7 @@ class FsRepository(object):
 
     def delete_package(self, package):
         logging.debug("delete_package %s", package)
-
-        os.remove(self._location['path']+"/"+package)
+        try:
+            os.remove(self._location['path']+"/"+package)
+        except IOError:
+            raise IOError("Package Not Found.")
