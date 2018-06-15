@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - PNDA-4415: Use boto 2.48
 
+### Fixed
+- PNDA-4669: Return HTTP 404 instead of 500 when a package is not found
+
 ## [0.3.2] 2018-02-10
 ### Changed
 - PNDA-3601: disable emailtext in Jenkins file and replace it with notifier stage and job
