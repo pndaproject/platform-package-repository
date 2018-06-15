@@ -88,7 +88,7 @@ class PackageRepositoryRestServer(object):
                     self.set_header('Content-Type', content_type)
                 try:
                     self.write(package_manager.read_package(path, self.get_argument("user.name")))
-                except KeyError:
+                except (KeyError, IOError):
                     logging.error(traceback.format_exc())
                     self.write("404 not found")
                     self.set_status(404)
