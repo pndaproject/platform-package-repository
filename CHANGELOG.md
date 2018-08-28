@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.0.0] 2018-08-28
 ### Added
 - PNDA-4562: Add authorization to API
 
