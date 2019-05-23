@@ -22,7 +22,7 @@ class LocalPackageRepository(object):
 
     def put_package(self, package_name, data):
         self.packages[package_name] = data
-        print "file" + package_name + " is uploaded"
+        print("file {} is uploaded".format(package_name))
 
     def get_package_list(self):
         return self.packages.keys()

@@ -107,7 +107,7 @@ class PackageRepositoryRestServer(object):
                 try:
                     package_manager.validate_package_name(path)
                     package_manager.put_package(path, self.request.body, self.get_argument("user.name"))
-                except ValueError, exception:
+                except ValueError as exception:
                     logging.error(traceback.format_exc())
                     self.set_status(400)
                     self.write(str(exception) + "\n")

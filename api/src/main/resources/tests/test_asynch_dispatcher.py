@@ -13,6 +13,8 @@
                      Run with main(), the easiest way is "nosetests test_*.py"
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import unittest
 from threading import Event
 from async_dispatcher import AsyncDispatcher
@@ -26,11 +28,11 @@ class GenerateRecord(unittest.TestCase):
         wait_for_exception = Event()
 
         def test_work():
-            print "sending " + " hello"
+            print("sending " + " hello")
             return "hello"
 
         def handler(param):
-            print "got asynch result: " + param
+            print("got asynch result: " + param)
             asynch_result[0] = param
 
         def raise_exception():
@@ -49,8 +51,8 @@ class GenerateRecord(unittest.TestCase):
             self.fail("should not reach this line")
         except Exception as ex:
             # check that the test exception has been thrown
-            self.assertTrue(test_exception_message in ex.message)
+            self.assertTrue(test_exception_message in str(ex))
         # wait for exception handler to fire
         wait_for_exception.wait(timeout=5)
         self.assertIsInstance(asynch_result[0], Exception)
-        self.assertEquals(asynch_result[0].message, test_exception_message)
+        self.assertEquals(str(asynch_result[0]), test_exception_message)
