@@ -21,7 +21,7 @@ from package_repo_rest_client import PackageRepoRestClient
 
 
 def run_system_tests(api_url):
-    print "Running system tests for: " + api_url
+    print("Running system tests for: " + api_url)
     test_package = "test_temp_sr_system_test-0.0.2.tar.gz"
     old_test_package = "test_temp_sr_system_test-0.0.1.tar.gz"
     old_test_package_data = "some older dummy data: " + str(time.time())
@@ -46,7 +46,7 @@ def run_system_tests(api_url):
     # older version of test package should be in list with a recency of a 2 versions
     assert is_package_in_package_list(old_test_package, package_list2)
     # finsihed testing:
-    print "TESTS SUCCEEDED!!!"
+    print("TESTS SUCCEEDED!!!")
 
 
 def is_package_in_package_list(package_name, package_list):
@@ -64,7 +64,7 @@ def is_package_in_package_list(package_name, package_list):
 
 
 if __name__ == "__main__":
-    print "Configuring test server..."
+    print("Configuring test server...")
     with open('../pr-config.json', 'r') as f:
         CONFIG = json.load(f)
     TEST_SERVER = PackageRepositoryRestServer(configuration=CONFIG)

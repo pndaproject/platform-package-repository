@@ -156,7 +156,7 @@ class PackageManager(object):
             package_version = ''.join(package_version_list[0])
             try:
                 _ = StrictVersion(package_version) # check if version conforms to strict versioning
-            except Exception, exception:
+            except Exception as exception:
                 raise ValueError(str(exception) + "\n" + "Package version must be a three part major.minor.patch e.g. name-1.2.3 but found %s" %
                                  package_name_without_extension)
         else:
