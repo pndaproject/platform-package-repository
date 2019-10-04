@@ -48,7 +48,8 @@ class PackageManager(object):
             try:
                 groups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
                 gid = pwd.getpwnam(user).pw_gid
-                groups.append(grp.getgrgid(gid).gr_name)
+                if gid != grp.getgrgid(gid).gr_gid:
+                    groups.append(grp.getgrgid(gid).gr_name)
             except:
                 raise exceptiondef.Forbidden('Failed to find details for user "%s"' % user)
         return groups
