@@ -32,6 +32,7 @@ from package_manager import PackageManager
 from swift_repository import SwiftRepository
 from aws_repository import S3Repository
 from fs_repository import FsRepository
+from exceptiondef import Forbidden
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -52,7 +53,6 @@ class PackageRepositoryRestServer(object):
         """
         Start running a rest interface using tornado
         """
-        # pylint: disable=redefined-variable-type
         if 'SwiftRepository' in self.config:
             package_repository = SwiftRepository(self.config['SwiftRepository'])
         elif 'S3Repository' in self.config:
@@ -82,16 +82,20 @@ class PackageRepositoryRestServer(object):
                 :param path:
                 :return:
                 """
-                logging.info("Getting: " + path)
+                logging.info("Getting: %s", path)
                 content_type, _ = mimetypes.guess_type(path)
                 if content_type:
                     self.set_header('Content-Type', content_type)
                 try:
-                    self.write(package_manager.read_package(path))
-                except KeyError:
+                    self.write(package_manager.read_package(path, self.get_argument("user.name")))
+                except (KeyError, IOError):
                     logging.error(traceback.format_exc())
                     self.write("404 not found")
                     self.set_status(404)
+                except Forbidden as ex:
+                    logging.error(traceback.format_exc())
+                    self.write("403 Forbidden - %s" % str(ex.msg))
+                    self.set_status(403)
 
             def put(self, path):
                 """
@@ -99,14 +103,18 @@ class PackageRepositoryRestServer(object):
                 :param path:
                 :return:
                 """
-                logging.info("Putting: " + path)
+                logging.info("Putting: %s", path)
                 try:
                     package_manager.validate_package_name(path)
-                    package_manager.put_package(path, self.request.body)
-                except ValueError, exception:
+                    package_manager.put_package(path, self.request.body, self.get_argument("user.name"))
+                except ValueError as exception:
                     logging.error(traceback.format_exc())
                     self.set_status(400)
                     self.write(str(exception) + "\n")
+                except Forbidden as ex:
+                    logging.error(traceback.format_exc())
+                    self.write("403 Forbidden - %s" % str(ex.msg))
+                    self.set_status(403)
 
             def delete(self, path):
                 """
@@ -114,13 +122,17 @@ class PackageRepositoryRestServer(object):
                 :param path:
                 :return:
                 """
-                logging.info("Deleting: " + path)
+                logging.info("Deleting: %s", path)
                 try:
-                    package_manager.delete_package(path)
+                    package_manager.delete_package(path, self.get_argument("user.name"))
                 except KeyError:
                     logging.error(traceback.format_exc())
                     self.write("404 not found")
                     self.set_status(404)
+                except Forbidden as ex:
+                    logging.error(traceback.format_exc())
+                    self.write("403 Forbidden - %s" % str(ex.msg))
+                    self.set_status(403)
 
         class PackagesHandler(tornado.web.RequestHandler):
             def get(self, path=None):
@@ -129,27 +141,27 @@ class PackageRepositoryRestServer(object):
                 :return:
                 """
                 logging.info("fetching package list... ")
-                # code to return flat list of packages:
-                # list_of_packages =                 package_manager.get_package_list()
-                # ret = {
-                #    "packages": list_of_packages
-                # }
-                # group packages by version and return:
-                recency = None
-                recency_parameter = self.get_arguments('recency')
-                if recency_parameter:
-                    recency = int(recency_parameter[0])
-                ret = package_manager.get_packages_grouped_by_version(number_of_versions_to_list=recency)
-                # convert to json and return
-                self.write(json.dumps(ret))
-                # silencing pylint about unused variable
-                if not path:
-                    path = False
+                try:
+                    # group packages by version and return:
+                    recency = None
+                    recency_parameter = self.get_arguments('recency')
+                    if recency_parameter:
+                        recency = int(recency_parameter[0])
+                    ret = package_manager.get_packages_grouped_by_version(self.get_argument("user.name"), number_of_versions_to_list=recency)
+                    # convert to json and return
+                    self.write(json.dumps(ret))
+                    # silencing pylint about unused variable
+                    if not path:
+                        path = False
+                except Forbidden as ex:
+                    logging.error(traceback.format_exc())
+                    self.write("403 Forbidden - %s" % str(ex.msg))
+                    self.set_status(403)
 
         logging.info("Starting up...")
         http_server = tornado.httpserver.HTTPServer(Application(), max_buffer_size=100000000)
         http_server.listen(options.port)
-        logging.info("Listening on port: " + str(options.port))
+        logging.info("Listening on port: %s", str(options.port))
         # notify that server has started:
         self._started.set()
         # start handling incomming requests:

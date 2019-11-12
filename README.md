@@ -58,17 +58,31 @@ Here are some example configurations for each supported option.
 
 ## Repository API
 
-By default, the packages API is available at port `8888` of the `edge` node.
+### Base URL
+
+All API paths below are relative to a base URL is defined by schemes, host, port and base path on the root level of this API specification.
+
+```
+<scheme>://<host>:<port>/<base path>
+```
+
+By default, the API uses 'https' scheme as the transfer protocol. Host is the domain name or hostname that serves the API. In order to access the API outside PNDA security perimeter, it has to via knox service by using the domain name or FQDN when creating a PNDA cluster. The domain name or FQDN must be resolvable via public or private DNS service. To access repository API, the base path, `/gateway/pnda/repository`, must be used as prefixes for all API paths. 
+
+e.g. ```https://knox.example.com:8443/gateway/pnda/repository```
 
 ### List packages from the repository
 
 ?recency=n may be used to control how many versions of each package are listed, by default recency=1
 ````
-GET /packages
+GET /packages?user.name=<username>
 
 Response Codes:
 200 - OK
+403 - Unauthorised user
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 Example response:
 [
@@ -87,12 +101,16 @@ Example response:
 ### Get package contents
 ````
 Downloads a package from the repository
-GET /packages/<package>
+GET /packages/<package>?user.name=<username>
 
 Response Codes:
 200 - OK
+403 - Unauthorised user
 404 - Not Found
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 Response body:
 The binary contents of the package that was uploaded
@@ -100,11 +118,15 @@ The binary contents of the package that was uploaded
 
 ### Upload a package to the repository
 ````
-PUT /packages/<package>
+PUT /packages/<package>?user.name=<username>
 
 Response Codes:
 200 - Accepted
+403 - Unauthorised user
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 e.g.
 curl http://host:8888/packages/my-package-1.0.0.tar.gz --upload-file my-package-1.0.0.tar.gz
@@ -112,12 +134,16 @@ curl http://host:8888/packages/my-package-1.0.0.tar.gz --upload-file my-package-
 ````
 ### Delete a package from the repository
 ````
-DELETE /packages/<package>
+DELETE /packages/<package>?user.name=<username>
 
 Response Codes:
 200 - Accepted
+403 - Unauthorised user
 404 - Not Found
 500 - Server Error
+
+Query Parameters:
+user.name - User name to run this command as. Should have permissions to perform the action as defined in authorizer_rules.yaml. 
 
 e.g.
 curl -X DELETE http://host:8888/packages/my-package-1.0.0.tar.gz

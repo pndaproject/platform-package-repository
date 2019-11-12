@@ -1,6 +1,22 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## [1.0.0] 2018-08-28
+### Added
+- PNDA-4562: Add authorization to API
+
+### Changed
+- PNDA-4415: Use boto 2.48
+
+### Fixed
+- PNDA-4669: Return HTTP 404 instead of 500 when a package is not found
+
+## [0.3.2] 2018-02-10
+### Changed
+- PNDA-3601: disable emailtext in Jenkins file and replace it with notifier stage and job
+
 ## [0.3.1] 2017-05-23
 ### Changed
 - PNDA-2577: review python deps versions

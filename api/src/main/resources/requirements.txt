@@ -1,8 +1,8 @@
 Babel==2.3.4
 backports-abc==0.5
 backports.ssl-match-hostname==3.5.0.1
-boto==2.46.1
-certifi==2016.9.26
+boto==2.48.0
+certifi==2017.4.17
 debtcollector==1.10.0
 funcsigs==1.0.2
 futures==3.0.5
@@ -22,6 +22,7 @@ pyparsing==2.1.10
 python-keystoneclient==3.8.0
 python-swiftclient==3.2.0
 pytz==2016.10
+PyYAML==3.12
 requests==2.12.4
 rfc3986==0.4.1
 singledispatch==3.4.0.3
