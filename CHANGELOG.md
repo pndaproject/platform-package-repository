@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.1.1] 2018-11-13
+### Fixed
+- Fix vulnerabilities in dependencies
+
+## [1.1.0] 2018-11-11
+### Added
+- Docker container support
+
 ## [1.0.0] 2018-08-28
 ### Added
 - PNDA-4562: Add authorization to API
